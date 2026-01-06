@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,8 +16,10 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
+    Route::resource('users', UserController::class)->names('users');
+    Route::get('/get-users', [UserController::class, 'getUsers']);
+
     Route::get('/get-support-queries', [ApiController::class, 'getSupportQueries']);
-    Route::get('/get-users', [ApiController::class, 'getUsers']);
     Route::get('/get-categories/{id?}', [ApiController::class, 'getCategories']);
     Route::post('/add-product-category/{id?}', [ApiController::class, 'addProductCategory']);
     Route::delete('/delete-product-category/{id}', [ApiController::class, 'deleteProductCategory']);

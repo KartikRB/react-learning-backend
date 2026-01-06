@@ -58,16 +58,6 @@ class ApiController extends Controller
         ]);
     }
 
-    public function getUsers()
-    {
-        $data = User::all();
-        return response()->json([
-            'status' => true,
-            'message' => 'Data found!',
-            'data' => $data
-        ]);
-    }
-
     public function getCategories($id = null)
     {
         $data = $id ? ProductCategory::find($id) : ProductCategory::all();
