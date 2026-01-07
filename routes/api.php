@@ -13,7 +13,7 @@ Route::post('/support-post', [ApiController::class, 'support']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', function (Request $request) {
-        return $request->user();
+        return $request->user()->load('userDetail');
     });
 
     Route::resource('users', UserController::class)->names('users');
