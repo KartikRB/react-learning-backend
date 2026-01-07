@@ -140,4 +140,24 @@ class ApiController extends Controller
             'message' => 'Category not found!',
         ]);
     }
+
+    public function removeCategoryIcon($id)
+    {
+        $category = ProductCategory::find($id);
+
+        if(!$category){
+            return response()->json([
+                'status' => false,
+                'message' => 'Category icon not removed!',
+            ]);
+        }
+
+        $category->icon = '';
+        $category->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Category icon removed successfully!',
+        ]);
+    }
 }

@@ -19,6 +19,9 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         $validated = $request->validated();
+        if ($request->hasFile('profile_image')) {
+            $validated['profile_image'] = $request->file('profile_image')->store('users', 'public');
+        }
         $user = $this->userService->create($validated);
 
         return response()->json([
@@ -31,6 +34,9 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $validated = $request->validated();
+        if ($request->hasFile('profile_image')) {
+            $validated['profile_image'] = $request->file('profile_image')->store('users', 'public');
+        }
         $user = $this->userService->update($user, $validated);
 
         return response()->json([
@@ -50,9 +56,9 @@ class UserController extends Controller
         ]);
     }
 
-    public function show(User $user)
+    public function show($id)
     {
-        $user->details = $user->userDetail;
+        $user = $this->userService->getUser($id);
         return response()->json([
             'status' => true,
             'message' => 'User data found successfully!',
@@ -62,12 +68,29 @@ class UserController extends Controller
 
     public function getUsers()
     {
-        $data = $this->userService->where('role', '!=', 'admin')->get();
+        $data = $this->userService->where('role', '!=', 'admin')->with('userDetail')->get();
 
         return response()->json([
             'status' => true,
             'message' => 'User data found!',
             'data' => $data
+        ]);
+    }
+
+    public function removeProfileImage($id)
+    {
+        $removed = $this->userService->removeProfileImage($id);
+
+        if(!$removed){
+            return response()->json([
+                'status' => false,
+                'message' => 'User profile image not removed!',
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'User profile image removed successfully!',
         ]);
     }
 }

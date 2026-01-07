@@ -18,9 +18,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::resource('users', UserController::class)->names('users');
     Route::get('/get-users', [UserController::class, 'getUsers']);
+    Route::delete('users/{id}/remove-profile-image', [UserController::class, 'removeProfileImage']);
 
     Route::get('/get-support-queries', [ApiController::class, 'getSupportQueries']);
     Route::get('/get-categories/{id?}', [ApiController::class, 'getCategories']);
     Route::post('/add-product-category/{id?}', [ApiController::class, 'addProductCategory']);
     Route::delete('/delete-product-category/{id}', [ApiController::class, 'deleteProductCategory']);
+    Route::delete('categories/{id}/remove-icon', [ApiController::class, 'removeCategoryIcon']);
 });
