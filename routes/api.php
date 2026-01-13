@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FaqController;
+use App\Http\Controllers\Api\productController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user()->load('userDetail');
     });
+
+    Route::resource('products', ProductController::class)->names('products');
+    Route::get('/get-products', [ProductController::class, 'getProducts']);
+    Route::post('/products/{product}/status', [ProductController::class, 'updateProductStatus']);
+    Route::post('/products/{product}/featured', [ProductController::class, 'updateProductFeatured']);
 
     Route::resource('users', UserController::class)->names('users');
     Route::get('/get-users', [UserController::class, 'getUsers']);
