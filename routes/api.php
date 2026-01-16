@@ -22,6 +22,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/get-products', [ProductController::class, 'getProducts']);
     Route::post('/products/{product}/status', [ProductController::class, 'updateProductStatus']);
     Route::post('/products/{product}/featured', [ProductController::class, 'updateProductFeatured']);
+    Route::post('/products/{product}/upload-images', [ProductController::class, 'uploadProductImages']);
+    Route::delete('products/{id}/remove-product-image', [ProductController::class, 'removeProductImage']);
 
     Route::resource('users', UserController::class)->names('users');
     Route::get('/get-users', [UserController::class, 'getUsers']);

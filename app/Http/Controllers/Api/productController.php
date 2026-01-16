@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProductImagesRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 
@@ -78,14 +80,16 @@ class productController extends Controller
 
     public function removeProductImage($id)
     {
-        $removed = $this->productService->removeProductImage($id);
+        $image = ProductImage::find($id);
 
-        if(!$removed){
+        if(!$image){
             return response()->json([
                 'status' => false,
                 'message' => 'Product image not removed!',
             ]);
         }
+
+        $image->delete();
 
         return response()->json([
             'status' => true,
@@ -116,6 +120,18 @@ class productController extends Controller
             'status' => true,
             'message' => 'product featured status updated successfully!',
             'is_featured' => $is_featured
+        ]);
+    }
+
+    public function uploadProductImages(StoreProductImagesRequest $request, Product $product)
+    {
+        $validated = $request->validated();
+        $images = $validated['images'] ?? [];
+        $this->productService->uploadProductImages($product, $images);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Product images uploaded successfully!',
         ]);
     }
 }

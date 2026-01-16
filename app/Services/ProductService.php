@@ -72,4 +72,14 @@ class ProductService extends BaseService
         ]);
     }
 
+    public function uploadProductImages(Product $product, $images)
+    {
+        foreach ($images as $image) {
+            $path = $image->store('products', 'public');
+            $product->images()->create(['path' => $path]);
+        }
+
+        return true;
+    }
+
 }
